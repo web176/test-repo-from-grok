@@ -1,67 +1,50 @@
-// Script Document Writer
+// Variables globales
+let currentDocument = {
+    title: 'Titre de l\'exposé',
+    content: ''
+};
 
 function formatText(command) {
-    const editor = document.getElementById('editor');
-    if (command === 'bold') document.execCommand('bold');
-    else if (command === 'italic') document.execCommand('italic');
-    else if (command === 'h1') document.execCommand('formatBlock', false, '<h1>');
-    else if (command === 'h2') document.execCommand('formatBlock', false, '<h2>');
+    document.execCommand(command, false, null);
 }
 
-function addSection(title) {
+function insertSection(sectionName) {
     const editor = document.getElementById('editor');
-    const h2 = document.createElement('h2');
-    h2.textContent = title;
-    editor.appendChild(h2);
-    const p = document.createElement('p');
-    p.textContent = 'Contenu de la section...';
-    editor.appendChild(p);
-    editor.focus();
+    const section = document.createElement('section');
+    section.innerHTML = `<h2>${sectionName}</h2><p>Contenu de la section ${sectionName.toLowerCase()}...</p>`;
+    editor.appendChild(section);
+    editor.scrollTop = editor.scrollHeight;
 }
 
 function exportPDF() {
-    const { jsPDF } = window.jspdf;
-    const doc = new jsPDF({
-        orientation: 'portrait',
-        unit: 'mm',
-        format: 'a4'
-    });
-    
-    doc.html(document.getElementById('editor'), {
-        callback: function(doc) {
-            doc.save('mon-expose.pdf');
-        },
-        x: 15,
-        y: 15,
-        width: 180,
-        windowWidth: 900
-    });
+    alert('Export PDF en cours... (Pour une vraie version, on peut ajouter jsPDF via CDN)');
+    window.print();
 }
 
 function exportWord() {
     const content = document.getElementById('editor').innerHTML;
-    const fullHTML = `<!DOCTYPE html><html><head><meta charset="UTF-8"></head><body>${content}</body></html>`;
-    const blob = new Blob([fullHTML], { type: 'application/msword' });
+    const blob = new Blob(['<html><head><meta charset="UTF-8"></head><body>' + content + '</body></html>'], {
+        type: 'application/msword'
+    });
     const link = document.createElement('a');
     link.href = URL.createObjectURL(blob);
-    link.download = 'mon-expose.doc';
+    link.download = (document.getElementById('doc-title').innerText || 'expose') + '.doc';
     link.click();
 }
 
 function saveDocument() {
-    localStorage.setItem('exposeContent', document.getElementById('editor').innerHTML);
-    alert('✅ Document sauvegardé !');
+    localStorage.setItem('documentWriter', document.getElementById('editor').innerHTML);
+    alert('✅ Document sauvegardé dans le navigateur !');
 }
 
-function clearDocument() {
-    if (confirm('Créer un nouvel exposé ?')) {
-        document.getElementById('editor').innerHTML = '<h1>Nouvel Exposé</h1><p>Commencez à rédiger ici...</p>';
-        localStorage.removeItem('exposeContent');
+function newDocument() {
+    if (confirm('Créer un nouveau document ?')) {
+        document.getElementById('editor').innerHTML = `<h1 id="doc-title">Titre de l'exposé</h1>`;
     }
 }
 
-// Chargement
+// Chargement automatique
 window.onload = () => {
-    const saved = localStorage.getItem('exposeContent');
+    const saved = localStorage.getItem('documentWriter');
     if (saved) document.getElementById('editor').innerHTML = saved;
 };

@@ -11,31 +11,40 @@
         <header>
             <h1>📝 Document Writer pour Exposés</h1>
             <div class="controls">
-                <button onclick="exportPDF()">📄 Export PDF</button>
-                <button onclick="exportWord()">📘 Export Word</button>
-                <button onclick="saveDocument()">💾 Sauvegarder</button>
-                <button onclick="clearDocument()">🆕 Nouveau</button>
+                <button onclick="newDocument()">Nouveau</button>
+                <button onclick="exportPDF()">Export PDF</button>
+                <button onclick="exportWord()">Export Word</button>
+                <button onclick="saveDocument()">Sauvegarder</button>
             </div>
         </header>
-
+        
         <div class="toolbar">
-            <button onclick="formatText('bold')">𝐁 Gras</button>
-            <button onclick="formatText('italic')">𝑰 Italique</button>
-            <button onclick="formatText('h1')">H1</button>
-            <button onclick="formatText('h2')">H2</button>
-            <button onclick="addSection('Introduction')">Introduction</button>
-            <button onclick="addSection('Développement')">Développement</button>
-            <button onclick="addSection('Conclusion')">Conclusion</button>
+            <button onclick="formatText('bold')">Gras</button>
+            <button onclick="formatText('italic')">Italique</button>
+            <button onclick="formatText('h1')">Titre 1</button>
+            <button onclick="formatText('h2')">Titre 2</button>
+            <button onclick="insertSection('Introduction')">Introduction</button>
+            <button onclick="insertSection('Développement')">Développement</button>
+            <button onclick="insertSection('Conclusion')">Conclusion</button>
         </div>
 
         <div id="editor" contenteditable="true" class="editor">
-            <h1>Titre de mon exposé</h1>
-            <p>Commencez à rédiger ici...</p>
+            <h1 id="doc-title">Titre de l'exposé</h1>
+            <section id="intro">
+                <h2>Introduction</h2>
+                <p>Écrivez ici votre introduction...</p>
+            </section>
+            <section id="dev">
+                <h2>Développement</h2>
+                <p>Écrivez ici le corps de votre exposé...</p>
+            </section>
+            <section id="conclusion">
+                <h2>Conclusion</h2>
+                <p>Écrivez ici votre conclusion...</p>
+            </section>
         </div>
     </div>
 
-    <!-- jsPDF CDN -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
     <script src="js/script.js"></script>
 </body>
 </html>
